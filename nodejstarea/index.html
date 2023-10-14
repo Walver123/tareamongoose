@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Catálogo de Películas</title>
+    <link rel="stylesheet" type="text/css" href="Css.css">
+</head>
+<body>
+    <h1>Catálogo de Películas</h1>
+
+    <div id="catalogo">
+    </div>
+
+    <script>
+        // Código JavaScript para obtener y mostrar películas desde la API
+        const catalogo = document.getElementById('catalogo');
+
+        // Función para obtener películas desde la API
+        async function obtenerPeliculas() {
+            try {
+                const response = await fetch('/peliculas'); // Cambia la ruta según tu configuración
+                const peliculas = await response.json();
+
+                peliculas.forEach(pelicula => {
+                    const peliculaDiv = document.createElement('div');
+                    peliculaDiv.classList.add('pelicula');
+
+                    const img = document.createElement('img');
+                    img.src = pelicula.imagen; // Cambia el nombre del campo según tu base de datos
+                    img.alt = pelicula.titulo; // Cambia el nombre del campo según tu base de datos
+
+                    const titulo = document.createElement('h2');
+                    titulo.textContent = pelicula.titulo;
+
+                    const descripcion = document.createElement('p');
+                    descripcion.textContent = pelicula.descripcion; // Cambia el nombre del campo según tu base de datos
+
+                    const calificacion = document.createElement('p');
+                    calificacion.textContent = `Calificación: ${pelicula.calificacion}`;
+
+                    const reseñasDiv = document.createElement('div');
+                    reseñasDiv.classList.add('reseñas');
+
+                    pelicula.reseñas.forEach(reseña => { // Cambia el nombre del campo según tu base de datos
+                        const reseñaP = document.createElement('p');
+                        reseñaP.textContent = `Reseña: ${reseña}`;
+                        reseñasDiv.appendChild(reseñaP);
+                    });
+
+                    peliculaDiv.appendChild(img);
+                    peliculaDiv.appendChild(titulo);
+                    peliculaDiv.appendChild(descripcion);
+                    peliculaDiv.appendChild(calificacion);
+                    peliculaDiv.appendChild(reseñasDiv);
+
+                    catalogo.appendChild(peliculaDiv);
+                });
+            } catch (error) {
+                console.error('Error al obtener películas:', error);
+            }
+        }
+
+        // Llama a la función para obtener películas cuando se carga la página
+        obtenerPeliculas();
+    </script>
+</body>
+</html>
